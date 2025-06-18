@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>かたちをつくろう　せんでつなごう</title>
+  <style>
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e6f7ff;
+    font-family: sans-serif;
+    touch-action: none;
+    flex-direction: column;
+  }
+
+  h2 {
+    color: #0055aa;
+    margin: 5px;
+  }
+    canvas {
+      border: none;
+      background-color: #ffffff;
+    }
+
+#resetBtn {
+  margin-top: 20px;
+  padding: 5px 5px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #0055aa;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 100px;
+}
+
+#howtoBtn {
+  margin-top: 20px;
+  padding: 5px 5px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #0055aa;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 100px;
+}
+
+.canvas-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+#buttonBox {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#girlIllustration {
+  position: absolute;
+  bottom: 30px;
+  right: -120px;
+  width: 100px;
+  pointer-events: none;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 300px;
+  font-size: 1.2em;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #0055aa;
+}
+
+.modal-content button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #66ccff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#modalOverlapImage {
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  width: 80px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#appFooter {
+  text-align: center;
+  color: #888888;
+  font-size: 0.9em;
+  pointer-events: none;
+}
+
+  </style>
+</head>
+<body>
+  <h2>かたちをつくろう　せんでつなごう</h2>
+<div class="canvas-wrapper">
+  <canvas id="myCanvas" width="600" height="480"></canvas>
+
+  <div id="buttonBox">
+    <button id="resetBtn">やりなおし</button>
+    <button id="howtoBtn">あそびかた</button>
+  </div>
+  <img id="girlIllustration" src="girl.png" alt="イラスト" />
+
+</div>
+
+<div id="howtoModal" class="modal">
+  <div class="modal-content">
+    <h3>あそびかた</h3>
+    <p>てん　と　てん　を　おすと<br>
+    せんが　ひけるよ<br>
+    いろいろな　かたちを<br>
+    つくってみよう！</p>
+    <button id="closeModalBtn">とじる</button>
+    <img id="modalOverlapImage" src="shape.png" alt="図形" />
+  </div>
+</div>
+
+<footer id="appFooter">
+  まなろっとスタジオ　がくしゅうアプリ
+</footer>
+
+
+  <script src="https://unpkg.com/paper"></script>
+  <script>
+
+    let allLines = [];
+
+    paper.install(window);
+    window.onload = function () {
+      paper.setup('myCanvas');
+
+      const gridPoints = [];
+      let currentLine = null;
+
+      for (let x = 60; x <= 540; x += 60) {
+        for (let y = 60; y <= 420; y += 60) {
+          const circle = new Path.Circle(new Point(x, y), 6);
+          circle.fillColor = '#66ccff';
+          gridPoints.push(circle);
+        }
+      }
+
+      view.onMouseDown = function (event) {
+
+        let nearest = null;
+        for (const pt of gridPoints) {
+          if (pt.position.getDistance(event.point) < 10) {
+            nearest = pt;
+            break;
+          }
+        }
+
+        if (nearest) {
+          if (!currentLine) {
+            currentLine = new Path();
+            currentLine.strokeColor = '#cc3333';
+            currentLine.strokeWidth = 5;
+            currentLine.strokeJoin = 'round';
+            currentLine.strokeCap = 'round';
+
+            currentLine.add(nearest.position);
+            allLines.push(currentLine);
+          } else {
+            currentLine.add(nearest.position);
+            currentLine = null;
+          }
+        }
+      };
+    };
+
+document.getElementById('resetBtn').onclick = function () {
+
+  for (const line of allLines) {
+    line.remove();
+  }
+  allLines = [];
+  currentLine = null;
+};
+
+document.getElementById('howtoBtn').onclick = function () {
+  document.getElementById('howtoModal').style.display = 'flex';
+};
+
+document.getElementById('closeModalBtn').onclick = function () {
+  document.getElementById('howtoModal').style.display = 'none';
+};
+
+
+  </script>
+</body>
+</html>
