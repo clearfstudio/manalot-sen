@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>かたちをつくろう　せんでつなごう</title>
   <style>
   body {
@@ -10,7 +10,6 @@
     justify-content: center;
     background-color: #e6f7ff;
     font-family: sans-serif;
-    touch-action: none;
     flex-direction: column;
   }
 
@@ -21,6 +20,7 @@
     canvas {
       border: none;
       background-color: #ffffff;
+      touch-action: none;
     }
 
 #resetBtn {
@@ -132,7 +132,7 @@
 <body>
   <h2>かたちをつくろう　せんでつなごう</h2>
 <div class="canvas-wrapper">
-  <canvas id="myCanvas" width="600" height="480"></canvas>
+  <canvas id="myCanvas" width="700" height="560"></canvas>
 
   <div id="buttonBox">
     <button id="resetBtn">やりなおし</button>
@@ -171,8 +171,8 @@
       const gridPoints = [];
       let currentLine = null;
 
-      for (let x = 60; x <= 540; x += 60) {
-        for (let y = 60; y <= 420; y += 60) {
+      for (let x = 70; x <= 630; x += 70) {
+        for (let y = 70; y <= 490; y += 70) {
           const circle = new Path.Circle(new Point(x, y), 6);
           circle.fillColor = '#66ccff';
           gridPoints.push(circle);
