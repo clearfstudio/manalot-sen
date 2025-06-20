@@ -42,6 +42,19 @@
   font-size: 1rem;
   border-radius: 8px;
   border: none;
+  background-color: #e65c00;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 100px;
+}
+
+#undoBtn {
+  margin-top: 20px;
+  padding: 5px 5px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
   background-color: #0055aa;
   color: white;
   cursor: pointer;
@@ -64,11 +77,11 @@
   gap: 10px;
 }
 
-#girlIllustration {
+#shapeIllustration {
   position: absolute;
   bottom: 30px;
-  right: -120px;
-  width: 100px;
+  right: -200px;
+  width: 180px;
   pointer-events: none;
 }
 
@@ -113,9 +126,20 @@
 
 #modalOverlapImage {
   position: absolute;
-  bottom: 20px;
-  right: 10px;
+  bottom: 15px;
+  right: 5px;
   width: 80px;
+  pointer-events: none;
+  transform: scaleY(-1) rotate(20deg);
+  z-index: 2;
+}
+
+#modalOverlapImage2 {
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  width: 80px;
+  transform: scaleX(-1) rotate(20deg);
   pointer-events: none;
   z-index: 2;
 }
@@ -135,10 +159,11 @@
   <canvas id="myCanvas" width="700" height="560"></canvas>
 
   <div id="buttonBox">
-    <button id="resetBtn">やりなおし</button>
+    <button id="undoBtn">やりなおし</button>
+    <button id="resetBtn">ぜんぶけす</button>
     <button id="howtoBtn">あそびかた</button>
   </div>
-  <img id="girlIllustration" src="girl.png" alt="イラスト" />
+  <img id="shapeIllustration" src="shape2.png" alt="イラスト" />
 
 </div>
 
@@ -149,6 +174,7 @@
     せんが　ひけるよ<br>
     いろいろな　かたちを<br>
     つくってみよう！</p>
+    <img id="modalOverlapImage2" src="shape.png" alt="図形" />
     <button id="closeModalBtn">とじる</button>
     <img id="modalOverlapImage" src="shape.png" alt="図形" />
   </div>
@@ -218,6 +244,14 @@ document.getElementById('resetBtn').onclick = function () {
 
 document.getElementById('howtoBtn').onclick = function () {
   document.getElementById('howtoModal').style.display = 'flex';
+};
+
+document.getElementById('undoBtn').onclick = function () {
+  if (allLines.length > 0) {
+    const lastLine = allLines.pop();  // 最後の線を取り出して
+    lastLine.remove();                // キャンバスから削除
+    currentLine = null;              // 今の操作中の線もキャンセル
+  }
 };
 
 document.getElementById('closeModalBtn').onclick = function () {
